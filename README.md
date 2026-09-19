@@ -88,6 +88,29 @@ npm run preview
 
 ---
 
+## ☁️ Deploying to Cloudflare Pages
+
+This project is pre-configured with `_redirects`, `_headers`, and `wrangler.toml` for Cloudflare Pages.
+
+### Option A: 1-Click CLI Deployment (Wrangler)
+```bash
+npm run deploy
+```
+*If not logged in, Wrangler will prompt you to authorize your Cloudflare account once in your browser, then immediately deploy `dist/`.*
+
+### Option B: Cloudflare Dashboard Git Integration
+1. Push this repository to **GitHub** or **GitLab**.
+2. Go to **Cloudflare Dashboard** -> **Compute (Workers & Pages)** -> **Pages** -> **Connect to Git**.
+3. Select your repository.
+4. Set the build settings:
+   - **Framework preset**: `Vite`
+   - **Build command**: `npm run build`
+   - **Build output directory**: `dist`
+5. Click **Save and Deploy**.
+6. Under **Custom domains**, add `tashabysujitha.com.au`. Cloudflare will automatically provision a free SSL certificate.
+
+---
+
 ## 📁 Project Structure
 
 ```
