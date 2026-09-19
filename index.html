@@ -2,17 +2,633 @@
 <html lang="en" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href="public/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tasha by Sujitha | Tasha Drapes & Tasha Costumes - Sydney, Australia</title>
-    <meta name="description" content="Tasha by Sujitha presents Tasha Drapes (curated sarees for sale) and Tasha Costumes (dance costume rentals in Sydney). High quality Indian classical costumes, Bharatanatyam, Kathak, Mohiniyattam, and designer sarees." />
-    <!-- Google Fonts: Cinzel, Cormorant Garamond, Plus Jakarta Sans -->
+    <title>Tasha by Sujitha | Tasha Costumes & Tasha Drapes - Sydney, Australia</title>
+    <meta name="description" content="Tasha by Sujitha presents Tasha Costumes (Dance Costumes & Accessories for Rental in Sydney) and Tasha Drapes (Curated Sarees & Blouses for Sale across Australia)." />
+    
+    <!-- Google Fonts: Cinzel & Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              gold: {
+                50: '#FDFBF7',
+                100: '#FBF3D5',
+                200: '#F5E6AC',
+                300: '#EED37B',
+                400: '#E5BF46',
+                500: '#D4AF37', // Regal Zari Gold
+                600: '#B89324',
+                700: '#917118',
+                800: '#6E5414',
+                900: '#4D3A11',
+                DEFAULT: '#D4AF37',
+              },
+              noir: {
+                950: '#070709',
+                900: '#0B0B0E',
+                850: '#111016',
+                800: '#16151E',
+                700: '#22202C',
+              },
+              ruby: {
+                DEFAULT: '#8B1E3F',
+                dark: '#5E1026',
+                light: '#BA3158',
+              },
+              emeraldDeep: {
+                DEFAULT: '#0A4D3C',
+                dark: '#063327',
+                light: '#136D56',
+              }
+            },
+            fontFamily: {
+              serif: ['Cinzel', 'Georgia', 'serif'],
+              sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        background-color: #070709;
+        background-image: 
+          radial-gradient(at 0% 0%, rgba(212, 175, 55, 0.05) 0px, transparent 50%),
+          radial-gradient(at 100% 100%, rgba(139, 30, 63, 0.05) 0px, transparent 50%);
+      }
+      h1, h2, h3, h4, .font-serif {
+        font-family: 'Cinzel', Georgia, serif;
+        letter-spacing: 0.02em;
+      }
+      /* Custom luxury scrollbar */
+      ::-webkit-scrollbar { width: 8px; }
+      ::-webkit-scrollbar-track { background: #0B0B0E; }
+      ::-webkit-scrollbar-thumb { background: #3A3528; border-radius: 4px; }
+      ::-webkit-scrollbar-thumb:hover { background: #D4AF37; }
+    </style>
   </head>
-  <body class="bg-noir-900 text-stone-200 antialiased selection:bg-gold-500 selection:text-noir-950 min-h-screen">
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+  <body class="bg-noir-950 text-stone-200 antialiased selection:bg-gold-500 selection:text-noir-950 min-h-screen flex flex-col justify-between">
+
+    <!-- ==================== HEADER ==================== -->
+    <header class="sticky top-0 z-50 bg-noir-950/90 backdrop-blur-md border-b border-gold-500/20">
+      <!-- Top micro bar with contact info -->
+      <div class="bg-noir-900 border-b border-gold-500/10 text-xs py-1.5 px-4 sm:px-8">
+        <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2">
+          <div className="flex items-center gap-4 text-stone-300 flex-wrap">
+            <span class="inline-flex items-center gap-1.5 text-gold-400 font-medium">
+              <svg class="w-3.5 h-3.5 text-gold-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              Sydney, NSW, Australia
+            </span>
+            <span class="hidden sm:inline-block text-stone-600">•</span>
+            <a href="tel:0466977408" class="inline-flex items-center gap-1.5 hover:text-gold-300 transition-colors">
+              <svg class="w-3.5 h-3.5 text-gold-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+              0466 977 408
+            </a>
+            <span class="hidden md:inline-block text-stone-600">•</span>
+            <a href="mailto:sujitha.cs@gmail.com" class="hidden md:inline-flex items-center gap-1.5 hover:text-gold-300 transition-colors">
+              <svg class="w-3.5 h-3.5 text-gold-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+              sujitha.cs@gmail.com
+            </a>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <span class="text-stone-400 text-[11px] hidden lg:inline">Official Instagram:</span>
+            <a href="https://www.instagram.com/tashadrapes/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-[11px] text-stone-300 hover:text-pink-400 transition-colors" title="Tasha Drapes on Instagram">
+              <svg class="w-3 h-3 text-pink-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+              <span>@tashadrapes</span>
+            </a>
+            <span class="text-stone-600">|</span>
+            <a href="https://www.instagram.com/tashacostumes/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-[11px] text-stone-300 hover:text-gold-400 transition-colors" title="Tasha Costumes on Instagram">
+              <svg class="w-3 h-3 text-gold-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+              <span>@tashacostumes</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Navbar -->
+      <div class="max-w-7xl mx-auto px-4 sm:px-8 py-3.5 flex items-center justify-between gap-4">
+        <a href="#" class="group flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full border border-gold-500/40 p-0.5 bg-noir-850 group-hover:border-gold-400 transition-all flex items-center justify-center overflow-hidden">
+            <img src="logos/thumb_tashadrapes.png" alt="Tasha by Sujitha" class="w-full h-full object-cover rounded-full" onerror="this.src='logos/tashadrapes.png'" />
+          </div>
+          <div>
+            <span class="font-serif text-lg sm:text-xl font-bold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-gold-200 via-gold-400 to-gold-600 block leading-tight">
+              TASHA
+            </span>
+            <span class="text-[10px] tracking-[0.25em] uppercase text-stone-400 font-light block">
+              by Sujitha
+            </span>
+          </div>
+        </a>
+
+        <!-- Header CTAs -->
+        <div class="flex items-center gap-3">
+          <a
+            href="https://wa.me/61466977408?text=Hello%20Sujitha,%20I%20would%20like%20to%20enquire%20about%20Tasha%20Drapes%20and%20Tasha%20Costumes."
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-950/60 border border-emerald-500/30 text-emerald-300 hover:bg-emerald-900/50 hover:border-emerald-400 text-xs font-medium transition-all"
+          >
+            <svg class="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21"/><path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1"/></svg>
+            <span class="hidden sm:inline">WhatsApp Chat</span>
+            <span class="sm:hidden">WhatsApp</span>
+          </a>
+
+          <a
+            href="#enquiry-section"
+            class="px-4 py-1.5 rounded-full bg-gradient-to-r from-gold-200 via-gold-400 to-gold-600 text-noir-950 text-xs font-bold hover:shadow-lg hover:shadow-gold-500/25 transition-all"
+          >
+            Enquiry Form
+          </a>
+        </div>
+      </div>
+    </header>
+
+
+    <!-- ==================== MAIN CONTENT ==================== -->
+    <main class="flex-1">
+      <!-- HERO & TWO LOGOS SECTION -->
+      <section class="relative px-4 sm:px-8 py-12 sm:py-20 overflow-hidden flex flex-col items-center justify-center text-center">
+        <!-- Ambient background glows -->
+        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] sm:w-[900px] h-[450px] bg-gold-500/10 rounded-full blur-[140px] pointer-events-none -z-10"></div>
+        <div class="absolute top-1/3 left-10 w-[300px] h-[300px] bg-ruby/15 rounded-full blur-[100px] pointer-events-none -z-10"></div>
+        <div class="absolute top-1/3 right-10 w-[300px] h-[300px] bg-emeraldDeep/15 rounded-full blur-[100px] pointer-events-none -z-10"></div>
+
+        <div class="max-w-6xl mx-auto w-full space-y-8">
+          <!-- Location & Brand Tag -->
+          <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-noir-850/90 border border-gold-500/30 text-xs text-gold-300 font-medium shadow-lg backdrop-blur-sm">
+            <svg class="w-3.5 h-3.5 text-gold-400" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.2h7.6l-6.2 4.5 2.4 7.3-6.2-4.5-6.2 4.5 2.4-7.3-6.2-4.5h7.6z"/></svg>
+            <span>Sydney, NSW, Australia</span>
+            <span class="text-stone-600">•</span>
+            <span>tashabysujitha.com.au</span>
+          </div>
+
+          <!-- Main Headline -->
+          <div class="space-y-3 max-w-3xl mx-auto">
+            <h1 class="font-serif text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white leading-tight">
+              Tasha by Sujitha
+            </h1>
+            <p class="text-stone-300 text-sm sm:text-lg max-w-2xl mx-auto font-light leading-relaxed">
+              Two distinct sister brands celebrating classical Indian dance traditions and timeless saree elegance under one umbrella.
+            </p>
+          </div>
+
+          <!-- ================= TWO LOGOS CENTER SHOWCASE ================= -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto pt-6 text-left">
+            
+            <!-- BRAND 1: TASHA COSTUMES -->
+            <div class="group relative rounded-3xl bg-gradient-to-b from-noir-800/95 to-noir-900/95 border border-gold-500/25 hover:border-emeraldDeep/60 p-6 sm:p-8 transition-all duration-300 hover:shadow-2xl hover:shadow-emeraldDeep/20 flex flex-col justify-between">
+              <div>
+                <!-- Top Badge -->
+                <div class="flex justify-between items-center mb-6">
+                  <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold tracking-wider uppercase bg-emeraldDeep/40 border border-emerald-500/40 text-emerald-300">
+                    Dance Costumes Rental
+                  </span>
+                  <span class="text-xs text-gold-400 font-medium">Sydney Hub</span>
+                </div>
+
+                <!-- Logo in the middle -->
+                <div class="w-full flex justify-center mb-6">
+                  <div class="w-48 sm:w-56 h-64 sm:h-72 rounded-2xl overflow-hidden bg-black border border-gold-500/30 p-2 shadow-xl group-hover:border-gold-400 transition-all flex items-center justify-center">
+                    <img 
+                      src="logos/tashacostumes.png" 
+                      alt="Tasha Costumes Logo" 
+                      class="w-full h-full object-contain"
+                      onerror="this.src='logos/thumb_tashacostumes.png'"
+                    />
+                  </div>
+                </div>
+
+                <!-- Business Details -->
+                <div class="text-center space-y-2 mb-6">
+                  <h2 class="font-serif text-2xl sm:text-3xl font-bold text-white group-hover:text-gold-300 transition-colors">
+                    Tasha Costumes
+                  </h2>
+                  <p class="text-xs text-emerald-400 tracking-wider uppercase font-semibold">
+                    Dance Costumes & Accessories for Rental • Sydney
+                  </p>
+                  <p class="text-xs sm:text-sm text-stone-300 leading-relaxed pt-1">
+                    Sydney-based costume rental business providing high-quality costumes and accessories for dance performances, cultural events, school functions, stage shows, festivals, and competitions.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Links & Instagram Under Logo -->
+              <div class="space-y-3 pt-4 border-t border-stone-800/80">
+                <a
+                  href="https://www.instagram.com/tashacostumes/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-emerald-950/40 border border-emerald-500/40 hover:bg-emerald-900/40 hover:border-emerald-400 text-emerald-300 text-xs font-semibold transition-all shadow-md"
+                >
+                  <svg class="w-4 h-4 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+                  <span>View Instagram Profile: @tashacostumes</span>
+                </a>
+
+                <a
+                  href="https://wa.me/61466977408?text=Hello%20Sujitha,%20I%20am%20enquiring%20about%20Tasha%20Costumes%20rental%20availability%20in%20Sydney."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-gradient-to-r from-emeraldDeep via-emerald-800 to-emeraldDeep hover:from-emeraldDeep-light hover:to-emeraldDeep text-white text-xs font-bold transition-all shadow-md shadow-emeraldDeep/20"
+                >
+                  <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21"/><path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1"/></svg>
+                  <span>WhatsApp Costumes Rental Enquiry</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- BRAND 2: TASHA DRAPES -->
+            <div class="group relative rounded-3xl bg-gradient-to-b from-noir-800/95 to-noir-900/95 border border-gold-500/25 hover:border-ruby/60 p-6 sm:p-8 transition-all duration-300 hover:shadow-2xl hover:shadow-ruby/20 flex flex-col justify-between">
+              <div>
+                <!-- Top Badge -->
+                <div class="flex justify-between items-center mb-6">
+                  <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold tracking-wider uppercase bg-ruby/30 border border-ruby/50 text-rose-300">
+                    Sarees & Blouses for Sale
+                  </span>
+                  <span class="text-xs text-stone-400 font-medium">Australia-wide</span>
+                </div>
+
+                <!-- Logo in the middle -->
+                <div class="w-full flex justify-center mb-6">
+                  <div class="w-48 sm:w-56 h-64 sm:h-72 rounded-2xl overflow-hidden bg-black border border-gold-500/30 p-2 shadow-xl group-hover:border-gold-400 transition-all flex items-center justify-center">
+                    <img 
+                      src="logos/tashadrapes.png" 
+                      alt="Tasha Drapes Logo" 
+                      class="w-full h-full object-contain"
+                      onerror="this.src='logos/thumb_tashadrapes.png'"
+                    />
+                  </div>
+                </div>
+
+                <!-- Business Details -->
+                <div class="text-center space-y-2 mb-6">
+                  <h2 class="font-serif text-2xl sm:text-3xl font-bold text-white group-hover:text-gold-300 transition-colors">
+                    Tasha Drapes
+                  </h2>
+                  <p class="text-xs text-rose-400 tracking-wider uppercase font-semibold">
+                    Curated Sarees & Blouses for Sale • Australia
+                  </p>
+                  <p class="text-xs sm:text-sm text-stone-300 leading-relaxed pt-1">
+                    A curated collection of sarees for customers in Australia, featuring elegant and contemporary styles, pure Kanjivaram silks, SUTA artisanal handloom cottons, and custom blouses.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Links & Instagram Under Logo -->
+              <div class="space-y-3 pt-4 border-t border-stone-800/80">
+                <a
+                  href="https://www.instagram.com/tashadrapes/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-pink-950/40 border border-pink-500/40 hover:bg-pink-900/40 hover:border-pink-400 text-pink-300 text-xs font-semibold transition-all shadow-md"
+                >
+                  <svg class="w-4 h-4 text-pink-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+                  <span>View Instagram Profile: @tashadrapes</span>
+                </a>
+
+                <a
+                  href="https://wa.me/61466977408?text=Hello%20Sujitha,%20I%20would%20like%20to%20enquire%20about%20purchasing%20a%20saree%20from%20Tasha%20Drapes."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-gradient-to-r from-ruby via-rose-900 to-ruby hover:from-ruby-light hover:to-ruby text-white text-xs font-bold transition-all shadow-md shadow-ruby/20"
+                >
+                  <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21"/><path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1"/></svg>
+                  <span>WhatsApp Saree Purchase Enquiry</span>
+                </a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ==================== WHATSAPP & ENQUIRY SECTION ==================== -->
+      <section id="enquiry-section" class="py-16 px-4 sm:px-8 border-t border-gold-500/20 bg-noir-900">
+        <div class="max-w-4xl mx-auto space-y-10">
+          
+          <!-- Section Title -->
+          <div class="text-center space-y-2">
+            <span class="text-xs font-semibold text-gold-400 uppercase tracking-widest flex items-center justify-center gap-1.5">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.2h7.6l-6.2 4.5 2.4 7.3-6.2-4.5-6.2 4.5 2.4-7.3-6.2-4.5h7.6z"/></svg>
+              Get In Touch
+            </span>
+            <h2 class="font-serif text-3xl sm:text-4xl font-bold text-white">
+              WhatsApp & Booking Enquiry
+            </h2>
+            <p class="text-stone-300 text-xs sm:text-sm max-w-lg mx-auto leading-relaxed">
+              No online payment required. Connect directly with Sujitha to check rental availability or enquire about our saree collections.
+            </p>
+          </div>
+
+          <!-- WhatsApp Direct Banner Card -->
+          <div class="p-6 rounded-2xl bg-gradient-to-r from-emerald-950/80 via-noir-850 to-noir-850 border border-emerald-500/40 flex flex-col sm:flex-row items-center justify-between gap-5 shadow-xl">
+            <div class="space-y-1 text-center sm:text-left">
+              <div class="flex items-center justify-center sm:justify-start gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+                <h3 class="font-serif text-lg font-bold text-white">Instant WhatsApp Chat with Sujitha</h3>
+              </div>
+              <p class="text-xs text-stone-300">
+                Direct phone: <strong class="text-gold-300">0466 977 408</strong> • Fast response for performance dates & sizing
+              </p>
+            </div>
+            
+            <a
+              href="https://wa.me/61466977408?text=Hello%20Sujitha,%20I%20would%20like%20to%20make%20an%20enquiry%20with%20Tasha%20by%20Sujitha."
+              target="_blank"
+              rel="noopener noreferrer"
+              class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-bold flex items-center gap-2 shadow-lg shadow-emerald-900/40 transition-all shrink-0"
+            >
+              <svg class="w-4 h-4 fill-white" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+              <span>Chat on WhatsApp</span>
+            </a>
+          </div>
+
+          <!-- Interactive Enquiry Form Card -->
+          <div class="rounded-3xl bg-noir-850 border border-gold-500/30 p-6 sm:p-8 shadow-2xl space-y-6">
+            <div class="flex items-center justify-between border-b border-stone-800 pb-4">
+              <div>
+                <h3 class="font-serif text-xl font-bold text-white">Send an Enquiry</h3>
+                <p class="text-xs text-stone-400">Fill in your details and click to send via WhatsApp or Email.</p>
+              </div>
+              <span class="text-xs px-3 py-1 rounded-full bg-noir-900 border border-gold-500/20 text-gold-300 font-medium">
+                No payment needed
+              </span>
+            </div>
+
+            <form id="enquiryForm" class="space-y-4 text-xs">
+              <!-- Name & Phone -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-stone-300 font-medium mb-1.5">Your Name *</label>
+                  <input
+                    type="text"
+                    id="clientName"
+                    required
+                    placeholder="e.g. Priya Sharma"
+                    class="w-full px-3.5 py-2.5 rounded-xl bg-noir-900 border border-stone-800 text-stone-200 placeholder-stone-600 focus:outline-none focus:border-gold-500"
+                  />
+                </div>
+                <div>
+                  <label class="block text-stone-300 font-medium mb-1.5">Phone Number (WhatsApp) *</label>
+                  <input
+                    type="tel"
+                    id="clientPhone"
+                    required
+                    placeholder="e.g. 0412 345 678"
+                    class="w-full px-3.5 py-2.5 rounded-xl bg-noir-900 border border-stone-800 text-stone-200 placeholder-stone-600 focus:outline-none focus:border-gold-500"
+                  />
+                </div>
+              </div>
+
+              <!-- Email & Brand -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-stone-300 font-medium mb-1.5">Email Address</label>
+                  <input
+                    type="email"
+                    id="clientEmail"
+                    placeholder="e.g. priya@gmail.com"
+                    class="w-full px-3.5 py-2.5 rounded-xl bg-noir-900 border border-stone-800 text-stone-200 placeholder-stone-600 focus:outline-none focus:border-gold-500"
+                  />
+                </div>
+                <div>
+                  <label class="block text-stone-300 font-medium mb-1.5">Select Business *</label>
+                  <select
+                    id="businessSelect"
+                    class="w-full px-3.5 py-2.5 rounded-xl bg-noir-900 border border-stone-800 text-stone-200 focus:outline-none focus:border-gold-500"
+                  >
+                    <option value="Tasha Costumes (Dance Costumes Rental)">Tasha Costumes (Dance Costumes Rental)</option>
+                    <option value="Tasha Drapes (Sarees for Sale)">Tasha Drapes (Sarees for Sale)</option>
+                    <option value="Both Brands">Both Brands</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Enquiry Type & Event Date -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-stone-300 font-medium mb-1.5">Enquiry Type</label>
+                  <select
+                    id="enquiryType"
+                    class="w-full px-3.5 py-2.5 rounded-xl bg-noir-900 border border-stone-800 text-stone-200 focus:outline-none focus:border-gold-500"
+                  >
+                    <option value="Costume Rental Availability">Costume Rental Availability (Sydney)</option>
+                    <option value="Dance School / Troupe Bulk Booking">Dance School / Troupe Bulk Booking</option>
+                    <option value="Saree Purchase Enquiry">Saree Purchase Enquiry</option>
+                    <option value="Saree Draping & Styling Consultation">Saree Draping & Styling Consultation</option>
+                    <option value="General Enquiry">General Enquiry</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-stone-300 font-medium mb-1.5">Event / Performance Date (if rental)</label>
+                  <input
+                    type="date"
+                    id="eventDate"
+                    class="w-full px-3.5 py-2.5 rounded-xl bg-noir-900 border border-stone-800 text-stone-200 focus:outline-none focus:border-gold-500"
+                  />
+                </div>
+              </div>
+
+              <!-- Message / Requirements -->
+              <div>
+                <label class="block text-stone-300 font-medium mb-1.5">Details, Sizes, or Requirements</label>
+                <textarea
+                  id="clientMessage"
+                  rows="3"
+                  placeholder="e.g. Looking for Bharatanatyam sets for 4 students, or details on Kanjivaram sarees..."
+                  class="w-full px-3.5 py-2.5 rounded-xl bg-noir-900 border border-stone-800 text-stone-200 placeholder-stone-600 focus:outline-none focus:border-gold-500 resize-none"
+                ></textarea>
+              </div>
+
+              <!-- Submit Buttons -->
+              <div class="pt-2 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  onclick="submitToWhatsApp()"
+                  class="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/30 transition-all"
+                >
+                  <svg class="w-4 h-4 fill-white" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+                  <span>Submit via WhatsApp</span>
+                </button>
+
+                <button
+                  type="button"
+                  onclick="submitToEmail()"
+                  class="w-full py-3 px-4 rounded-xl bg-noir-900 hover:bg-stone-800 border border-gold-500/40 text-gold-300 font-bold flex items-center justify-center gap-2 transition-all"
+                >
+                  <svg class="w-4 h-4 text-gold-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                  <span>Submit via Email</span>
+                </button>
+              </div>
+
+              <!-- Direct Call Prompt -->
+              <div class="text-center pt-2">
+                <p class="text-[11px] text-stone-400">
+                  Or call Sujitha directly at: <a href="tel:0466977408" class="text-gold-300 font-semibold underline">0466 977 408</a>
+                </p>
+              </div>
+            </form>
+          </div>
+
+        </div>
+      </section>
+    </main>
+
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="border-t border-gold-500/20 bg-noir-950 text-stone-300 pt-14 pb-10 px-4 sm:px-8">
+      <div class="max-w-6xl mx-auto space-y-10">
+        
+        <!-- Both Logos & Instagram Links In Footer -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 py-6 border-b border-stone-800">
+          
+          <!-- Tasha Costumes Footer -->
+          <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4 p-5 rounded-2xl bg-noir-900/70 border border-stone-800 text-center sm:text-left">
+            <div class="w-16 h-24 shrink-0 rounded-xl overflow-hidden bg-black border border-gold-500/30 p-1 flex items-center justify-center">
+              <img src="logos/thumb_tashacostumes.png" alt="Tasha Costumes" class="w-full h-full object-contain" onerror="this.src='logos/tashacostumes.png'" />
+            </div>
+            <div class="space-y-1.5 flex-1">
+              <h4 class="font-serif text-base font-bold text-white">Tasha Costumes</h4>
+              <p class="text-xs text-emerald-300">Dance Costumes & Accessories for Rental • Sydney</p>
+              <p class="text-xs text-stone-400">
+                Classical Bharatanatyam, Mohiniyattam, Margamkali, Kathak, folk dance, and temple ornaments.
+              </p>
+              <a
+                href="https://www.instagram.com/tashacostumes/"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center gap-1.5 text-xs text-emerald-400 hover:text-emerald-300 pt-1 font-medium"
+              >
+                <svg class="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+                <span>View Instagram: @tashacostumes</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Tasha Drapes Footer -->
+          <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4 p-5 rounded-2xl bg-noir-900/70 border border-stone-800 text-center sm:text-left">
+            <div class="w-16 h-24 shrink-0 rounded-xl overflow-hidden bg-black border border-gold-500/30 p-1 flex items-center justify-center">
+              <img src="logos/thumb_tashadrapes.png" alt="Tasha Drapes" class="w-full h-full object-contain" onerror="this.src='logos/tashadrapes.png'" />
+            </div>
+            <div class="space-y-1.5 flex-1">
+              <h4 class="font-serif text-base font-bold text-white">Tasha Drapes</h4>
+              <p class="text-xs text-rose-300">Curated Sarees & Blouses for Sale • Australia</p>
+              <p class="text-xs text-stone-400">
+                Handpicked Kanjivaram silks, SUTA artisanal handloom cottons, and bespoke blouse styling.
+              </p>
+              <a
+                href="https://www.instagram.com/tashadrapes/"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center gap-1.5 text-xs text-pink-400 hover:text-pink-300 pt-1 font-medium"
+              >
+                <svg class="w-3.5 h-3.5 text-pink-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+                <span>View Instagram: @tashadrapes</span>
+              </a>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Contact & Copyright Bar -->
+        <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-stone-400">
+          <div class="flex flex-wrap items-center justify-center md:justify-start gap-4">
+            <span class="text-white font-serif font-bold">Tasha by Sujitha</span>
+            <span>•</span>
+            <a href="tel:0466977408" class="hover:text-gold-300">Phone: 0466 977 408</a>
+            <span>•</span>
+            <a href="mailto:sujitha.cs@gmail.com" class="hover:text-gold-300">Email: sujitha.cs@gmail.com</a>
+            <span>•</span>
+            <span>Sydney, NSW, Australia</span>
+          </div>
+
+          <div class="text-center md:text-right text-stone-500">
+            <p>© <script>document.write(new Date().getFullYear())</script> Tasha by Sujitha (tashabysujitha.com.au). All rights reserved.</p>
+          </div>
+        </div>
+
+      </div>
+    </footer>
+
+    <!-- ==================== FLOATING WHATSAPP BUTTON ==================== -->
+    <aside aria-label="Quick contact" class="fixed bottom-5 right-5 z-50">
+      <a
+        href="https://wa.me/61466977408?text=Hello%20Sujitha,%20I%20would%20like%20to%20enquire%20about%20Tasha%20Drapes%20and%20Tasha%20Costumes."
+        target="_blank"
+        rel="noopener noreferrer"
+        class="flex items-center gap-2 px-4 py-2.5 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white shadow-2xl shadow-emerald-950/80 transition-all hover:scale-105"
+        title="Chat on WhatsApp"
+      >
+        <svg class="w-5 h-5 fill-white" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+        <span class="text-xs font-bold hidden sm:inline">WhatsApp Us</span>
+      </a>
+    </aside>
+
+    <!-- ==================== CLIENT SCRIPTS ==================== -->
+    <script>
+      function getFormValues() {
+        const name = document.getElementById('clientName').value.trim();
+        const phone = document.getElementById('clientPhone').value.trim();
+        const email = document.getElementById('clientEmail').value.trim();
+        const business = document.getElementById('businessSelect').value;
+        const type = document.getElementById('enquiryType').value;
+        const date = document.getElementById('eventDate').value;
+        const message = document.getElementById('clientMessage').value.trim();
+        return { name, phone, email, business, type, date, message };
+      }
+
+      function submitToWhatsApp() {
+        const v = getFormValues();
+        if (!v.name || !v.phone) {
+          alert('Please enter your name and phone number to send your enquiry via WhatsApp.');
+          return;
+        }
+
+        let msg = `*Enquiry for ${v.business}*\n`;
+        msg += `------------------------------\n`;
+        msg += `• *Name:* ${v.name}\n`;
+        msg += `• *Phone:* ${v.phone}\n`;
+        if (v.email) msg += `• *Email:* ${v.email}\n`;
+        msg += `• *Enquiry Type:* ${v.type}\n`;
+        if (v.date) msg += `• *Event Date:* ${v.date}\n`;
+        if (v.message) msg += `• *Requirements:* ${v.message}\n`;
+        msg += `------------------------------\nSent from tashabysujitha.com.au`;
+
+        const url = `https://wa.me/61466977408?text=${encodeURIComponent(msg)}`;
+        window.open(url, '_blank');
+      }
+
+      function submitToEmail() {
+        const v = getFormValues();
+        if (!v.name) {
+          alert('Please enter your name.');
+          return;
+        }
+
+        const subject = encodeURIComponent(`Website Enquiry: ${v.business} - ${v.type}`);
+        let body = `Hello Sujitha,\n\nI would like to make an enquiry regarding ${v.business}.\n\n`;
+        body += `Name: ${v.name}\n`;
+        body += `Phone: ${v.phone}\n`;
+        if (v.email) body += `Email: ${v.email}\n`;
+        body += `Enquiry Type: ${v.type}\n`;
+        if (v.date) body += `Event Date: ${v.date}\n`;
+        if (v.message) body += `Message / Requirements: ${v.message}\n\n`;
+        body += `Thank you!`;
+
+        window.location.href = `mailto:sujitha.cs@gmail.com?subject=${subject}&body=${encodeURIComponent(body)}`;
+      }
+    </script>
   </body>
 </html>
