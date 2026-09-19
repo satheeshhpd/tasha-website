@@ -67,7 +67,7 @@ npx wrangler pages deploy . --project-name=tashabysujitha
 ## 📞 Contact Details
 
 - **Phone / WhatsApp**: `0466 977 408`
-- **Email**: `sujitha.cs@gmail.com`
+- **Email**: `tashabysujitha@gmail.com`
 - **Location**: Sydney, NSW, Australia
 - **Instagram**:
   - Tasha Costumes: [https://www.instagram.com/tashacostumes/](https://www.instagram.com/tashacostumes/)
