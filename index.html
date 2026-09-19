@@ -555,7 +555,7 @@
           </div>
 
           <div class="text-center md:text-right text-stone-500">
-            <p>© <script>document.write(new Date().getFullYear())</script> Tasha by Sujitha (tashabysujitha.com.au). All rights reserved.</p>
+            <p>© <span id="copyrightYear">2026</span> Tasha by Sujitha (tashabysujitha.com.au). All rights reserved.</p>
           </div>
         </div>
 
@@ -578,6 +578,10 @@
 
     <!-- ==================== CLIENT SCRIPTS ==================== -->
     <script>
+      try {
+        document.getElementById('copyrightYear').textContent = new Date().getFullYear();
+      } catch (e) {}
+
       function getFormValues() {
         const name = document.getElementById('clientName').value.trim();
         const phone = document.getElementById('clientPhone').value.trim();
