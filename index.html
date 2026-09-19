@@ -447,6 +447,9 @@
                 ></textarea>
               </div>
 
+              <!-- Status Message Container (Success / Error) -->
+              <div id="formStatus" class="hidden p-4 rounded-2xl text-xs font-medium transition-all"></div>
+
               <!-- Submit Buttons -->
               <div class="pt-2 grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <button
@@ -460,11 +463,12 @@
 
                 <button
                   type="button"
+                  id="emailSubmitBtn"
                   onclick="submitToEmail()"
                   class="w-full py-3 px-4 rounded-xl bg-noir-900 hover:bg-stone-800 border border-gold-500/40 text-gold-300 font-bold flex items-center justify-center gap-2 transition-all"
                 >
-                  <svg class="w-4 h-4 text-gold-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                  <span>Submit via Email</span>
+                  <svg id="emailBtnIcon" class="w-4 h-4 text-gold-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                  <span id="emailBtnText">Submit via Email</span>
                 </button>
               </div>
             </form>
@@ -604,25 +608,95 @@
         window.open(url, '_blank');
       }
 
-      function submitToEmail() {
+      // ========================================================
+      // Web3Forms Configuration
+      // 1. Get your free Access Key at: https://web3forms.com
+      // 2. Paste your Access Key between the quotes below
+      // ========================================================
+      const WEB3FORMS_ACCESS_KEY = "YOUR_ACCESS_KEY_HERE";
+
+      async function submitToEmail() {
         const v = getFormValues();
-        if (!v.name) {
-          alert('Please enter your name.');
+        if (!v.name || !v.phone) {
+          showFormStatus('Please enter your name and phone number before submitting.', 'error');
           return;
         }
 
-        const subject = encodeURIComponent(`Website Enquiry: ${v.business} - ${v.type}`);
-        let body = `Hello Sujitha,\n\nI would like to make an enquiry regarding ${v.business}.\n\n`;
-        body += `Name: ${v.name}\n`;
-        body += `Phone: ${v.phone}\n`;
-        if (v.email) body += `Email: ${v.email}\n`;
-        body += `Enquiry Type: ${v.type}\n`;
-        if (v.date) body += `Event Date: ${v.date}\n`;
-        if (v.location) body += `Event/Delivery Location: ${v.location}\n`;
-        if (v.message) body += `Message / Requirements: ${v.message}\n\n`;
-        body += `Thank you!`;
+        // If user hasn't added their Web3Forms key yet, fallback to mailto
+        if (!WEB3FORMS_ACCESS_KEY || WEB3FORMS_ACCESS_KEY === "YOUR_ACCESS_KEY_HERE") {
+          const subject = encodeURIComponent(`Website Enquiry: ${v.business} - ${v.type}`);
+          let body = `Hello Sujitha,\n\nI would like to make an enquiry regarding ${v.business}.\n\n`;
+          body += `Name: ${v.name}\n`;
+          body += `Phone: ${v.phone}\n`;
+          if (v.email) body += `Email: ${v.email}\n`;
+          body += `Enquiry Type: ${v.type}\n`;
+          if (v.date) body += `Event Date: ${v.date}\n`;
+          if (v.location) body += `Event/Delivery Location: ${v.location}\n`;
+          if (v.message) body += `Message / Requirements: ${v.message}\n\n`;
+          body += `Thank you!`;
 
-        window.location.href = `mailto:tashabysujitha@gmail.com?subject=${subject}&body=${encodeURIComponent(body)}`;
+          window.location.href = `mailto:tashabysujitha@gmail.com?subject=${subject}&body=${encodeURIComponent(body)}`;
+          return;
+        }
+
+        const btn = document.getElementById('emailSubmitBtn');
+        const btnText = document.getElementById('emailBtnText');
+        const originalText = btnText.textContent;
+
+        try {
+          btn.disabled = true;
+          btnText.textContent = 'Sending...';
+          hideFormStatus();
+
+          const response = await fetch("https://api.web3forms.com/submit", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Accept": "application/json"
+            },
+            body: JSON.stringify({
+              access_key: WEB3FORMS_ACCESS_KEY,
+              subject: `Website Enquiry: ${v.business} - ${v.type}`,
+              from_name: "Tasha by Sujitha Website",
+              name: v.name,
+              phone: v.phone,
+              email: v.email || "Not provided",
+              business: v.business,
+              enquiry_type: v.type,
+              event_date: v.date || "Not specified",
+              event_delivery_location: v.location || "Not specified",
+              message: v.message || "None",
+            })
+          });
+
+          const result = await response.json();
+
+          if (result.success) {
+            showFormStatus('✓ Thank you! Your enquiry has been sent successfully. We will contact you shortly.', 'success');
+            document.getElementById('enquiryForm').reset();
+          } else {
+            showFormStatus(result.message || 'Something went wrong while sending. Please try via WhatsApp or email directly.', 'error');
+          }
+        } catch (error) {
+          showFormStatus('Unable to send at this moment. Please reach out via WhatsApp or email directly.', 'error');
+        } finally {
+          btn.disabled = false;
+          btnText.textContent = originalText;
+        }
+      }
+
+      function showFormStatus(msg, type) {
+        const el = document.getElementById('formStatus');
+        el.className = type === 'success' 
+          ? 'p-4 rounded-2xl text-xs font-medium bg-emerald-950/80 border border-emerald-500/50 text-emerald-200'
+          : 'p-4 rounded-2xl text-xs font-medium bg-ruby/30 border border-ruby text-rose-200';
+        el.textContent = msg;
+        el.classList.remove('hidden');
+      }
+
+      function hideFormStatus() {
+        const el = document.getElementById('formStatus');
+        el.classList.add('hidden');
       }
     </script>
   </body>
