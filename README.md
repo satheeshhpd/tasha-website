@@ -1,155 +1,74 @@
-# Tasha by Sujitha — Official Website (`tashabysujitha.com.au`)
+# Tasha by Sujitha — Official Landing Page (`tashabysujitha.com.au`)
 
-A luxury, high-performance web experience for **Tasha by Sujitha**, showcasing two distinct sister brands founded by Sujitha Sugunan in Sydney, Australia:
-
-1. **Tasha Drapes**: Curated sarees and blouses for sale across Australia, celebrating timeless Kanjivarams, SUTA artisanal handloom cottons, Banarasi brocades, and contemporary drapes.
-2. **Tasha Costumes**: Sydney's premier dance costume and accessories rental service, providing stage-ready classical attire (Bharatanatyam, Mohiniyattam, Kathak, Margamkali), folk dance outfits, temple jewelry, and props for dance academies, schools, and cultural festivals.
-
----
-
-## 🌟 Key Highlights & Brand Features
-
-- **Dual-Brand Architecture**:
-  - Seamless brand gateway on the homepage showcasing both brand logos side-by-side.
-  - Dedicated Instagram links under each logo:
-    - Tasha Drapes: [@tashadrapes](https://www.instagram.com/tashadrapes/)
-    - Tasha Costumes: [@tashacostumes](https://www.instagram.com/tashacostumes/)
-  - Interactive brand switcher in the header (`All Brands`, `Tasha Drapes`, `Tasha Costumes`) that smoothly filters and navigates to each brand universe.
-- **Tasha Costumes Rental Portal**:
-  - Full **17 Categories** with instant filter chips:
-    1. *Classical Dance Costumes*
-    2. *Bharatanatyam*
-    3. *Mohiniyattam*
-    4. *Margamkali*
-    5. *Kathak*
-    6. *Folk Dance*
-    7. *Bollywood Costumes*
-    8. *Traditional Costumes*
-    9. *Men's Costumes*
-    10. *Adult Costumes*
-    11. *Kids Costumes*
-    12. *Dance Props*
-    13. *Dance Ornaments*
-    14. *Skirts*
-    15. *Tops*
-    16. *Dupattas*
-    17. *Accessories*
-  - Complete set inclusions list, available size ranges, and Sydney pickup info.
-  - **Rental Booking / Date Checker Flow**: Pre-populates the costume name and event date for direct WhatsApp or email enquiry.
-- **Tasha Drapes Boutique Portal**:
-  - Showcases curated heirloom weaves (Mulberry Kanjivaram, Banarasi Katan, SUTA organic cottons, ethereal organza).
-  - Custom maggam & zardosi blouse styling consultation.
-  - **"Enquire to Buy"** flow connecting directly to Sujitha.
-- **Enquiry-Driven (No Online Payment Gateway Required)**:
-  - Generates seamless WhatsApp messages with pre-formatted details to `+61 466 977 408`.
-  - One-click phone calling to `0466 977 408`.
-  - Pre-filled email enquiries to `sujitha.cs@gmail.com`.
-  - Interactive enquiry modal accessible across all items.
-- **Visual Aesthetic & Theme**:
-  - Deep royal obsidian noir (`#0B0B0E`), imperial zari gold (`#D4AF37`), sindoor ruby (`#8B1E3F`), and classical temple emerald (`#0A4D3C`).
-  - Google Fonts: *Cinzel*, *Cormorant Garamond*, and *Plus Jakarta Sans*.
+A simple, standalone landing page for **Tasha by Sujitha**, showcasing its two sister brands:
+1. **Tasha Costumes**: Dance Costumes & Accessories for Rental • Sydney
+2. **Tasha Drapes**: Curated Sarees & Blouses for Sale • Australia
 
 ---
 
-## 📞 Direct Contact Information
+## 🌟 Features
 
-- **Phone / WhatsApp**: `0466 977 408` (International: `+61 466 977 408`)
-- **Email**: `sujitha.cs@gmail.com`
-- **Location**: Sydney, New South Wales, Australia
-- **Instagram**:
-  - Tasha Drapes: [https://www.instagram.com/tashadrapes/](https://www.instagram.com/tashadrapes/)
-  - Tasha Costumes: [https://www.instagram.com/tashacostumes/](https://www.instagram.com/tashacostumes/)
-
----
-
-## 🚀 Getting Started Locally
-
-### 1. Install Dependencies
-```bash
-npm install
-```
-
-### 2. Start Development Server
-```bash
-npm run dev
-```
-Open `http://localhost:5173` in your browser.
-
-### 3. Build for Production
-```bash
-npm run build
-```
-Creates an optimized static production build in the `dist/` directory, ready to deploy to any web host (Vercel, Netlify, Cloudflare Pages, AWS, cPanel).
-
-### 4. Preview Production Build
-```bash
-npm run preview
-```
+- **Centered Dual Logos**: Displays the logos for both Tasha Costumes and Tasha Drapes side-by-side with Instagram profile links under each.
+- **Direct WhatsApp Option**: Instant one-click WhatsApp chat button to Sujitha (`0466 977 408`).
+- **Booking & Purchase Enquiry Form**:
+  - Customer Name, Phone, Email
+  - Select Business (*Tasha Costumes / Tasha Drapes / Both*)
+  - Enquiry Type (*Rental availability, Saree purchase, Styling consultation, Bulk group booking*)
+  - Performance / Event Date picker
+  - Details / Size requirements
+  - Direct submission via WhatsApp or Email (no payment gateway needed)
+- **Header & Footer**: Consistent luxury gold and obsidian dark theme with contact information.
 
 ---
 
-## ☁️ Deploying to Cloudflare Pages
-
-This project is pre-configured with `_redirects`, `_headers`, and `wrangler.toml` for Cloudflare Pages.
-
-### Option A: 1-Click CLI Deployment (Wrangler)
-```bash
-npm run deploy
-```
-*If not logged in, Wrangler will prompt you to authorize your Cloudflare account once in your browser, then immediately deploy `dist/`.*
-
-### Option B: Cloudflare Dashboard Git Integration
-1. Push this repository to **GitHub** or **GitLab**.
-2. Go to **Cloudflare Dashboard** -> **Compute (Workers & Pages)** -> **Pages** -> **Connect to Git**.
-3. Select your repository.
-4. Set the build settings:
-   - **Framework preset**: `Vite`
-   - **Build command**: `npm run build`
-   - **Build output directory**: `dist`
-5. Click **Save and Deploy**.
-6. Under **Custom domains**, add `tashabysujitha.com.au`. Cloudflare will automatically provision a free SSL certificate.
-
----
-
-## 📁 Project Structure
+## 📁 Files Included
 
 ```
 ecommerce/
-├── logos/                         # Original high-res logos
-├── public/
-│   ├── favicon.svg                # Gold monogram favicon
-│   ├── images/                    # Curated costumes and saree photography
-│   └── logos/                     # Web-optimized logos for both brands
-├── src/
-│   ├── components/
-│   │   ├── AboutSection.jsx       # Story of Sujitha and both brands
-│   │   ├── EnquiryModal.jsx       # Modal for rental & purchase inquiries
-│   │   ├── FloatingContactBar.jsx # WhatsApp & Call floating action widget
-│   │   ├── Footer.jsx             # Comprehensive footer with both logos & contacts
-│   │   ├── Hero.jsx               # Dual-brand gateway with Instagram handles
-│   │   ├── Icons.jsx              # Custom crisp SVG icons (Instagram, WhatsApp)
-│   │   ├── Navbar.jsx             # Brand switcher pill & sticky navigation
-│   │   ├── RentalFaq.jsx          # FAQ accordion (rentals, hygiene, deposits)
-│   │   ├── TashaCostumesSection.jsx # 17 costume categories & rental cards
-│   │   ├── TashaDrapesSection.jsx # Saree collections & purchase cards
-│   │   ├── Testimonials.jsx       # Sydney dance community reviews
-│   │   └── WhyChooseUs.jsx        # Value propositions & local Sydney advantages
-│   ├── data/
-│   │   ├── categories.js          # Costume categories, drapes collections, audience
-│   │   └── products.js            # Costumes, sarees, testimonials, FAQs
-│   ├── App.jsx                    # Main application state & brand switcher logic
-│   ├── index.css                  # Tailwind styles and gold glow utilities
-│   └── main.jsx                   # React DOM render root
-├── index.html                     # HTML entry point with Google Fonts
-├── package.json
-├── tailwind.config.js
-└── vite.config.js
+├── index.html        # Main standalone landing page (zero build step needed)
+├── favicon.svg       # Brand monogram favicon
+├── logos/            # Web-optimized logos and thumbnails for both brands
+│   ├── tashacostumes.png
+│   ├── tashadrapes.png
+│   ├── thumb_tashacostumes.png
+│   └── thumb_tashadrapes.png
+├── _redirects        # Cloudflare Pages SPA fallback rule
+├── _headers          # Cloudflare Pages caching and security headers
+├── wrangler.toml     # Cloudflare Pages deployment configuration
+└── README.md
 ```
 
 ---
 
-## ✍️ Updating Products & Inventory
+## ☁️ How to Deploy to Cloudflare Pages
 
-- To add or edit rental costumes or sarees, edit `src/data/products.js`.
-- Each product includes `name`, `brand`, `categories`, `description`, `includes`, `image`, and `sizesAvailable`.
-- The website automatically syncs filters, search, and enquiry modals with whatever products you add!
+### Option 1: Direct Upload (Drag & Drop)
+1. Go to the [Cloudflare Dashboard](https://dash.cloudflare.com/).
+2. Navigate to **Workers & Pages** -> **Create application** -> **Pages** -> **Upload assets**.
+3. Upload this folder.
+4. Add your custom domain `tashabysujitha.com.au` under Custom Domains.
+
+### Option 2: Git Repository (GitHub / GitLab)
+1. Push this folder to a Git repository.
+2. In Cloudflare Pages, connect to your repository.
+3. Set:
+   - **Framework preset**: `None`
+   - **Build command**: *(leave blank)*
+   - **Build output directory**: `.`
+4. Deploy!
+
+### Option 3: Wrangler CLI
+```bash
+npx wrangler pages deploy . --project-name=tashabysujitha
+```
+
+---
+
+## 📞 Contact Details
+
+- **Phone / WhatsApp**: `0466 977 408`
+- **Email**: `sujitha.cs@gmail.com`
+- **Location**: Sydney, NSW, Australia
+- **Instagram**:
+  - Tasha Costumes: [https://www.instagram.com/tashacostumes/](https://www.instagram.com/tashacostumes/)
+  - Tasha Drapes: [https://www.instagram.com/tashadrapes/](https://www.instagram.com/tashadrapes/)
