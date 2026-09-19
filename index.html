@@ -408,7 +408,7 @@
                     id="enquiryType"
                     class="w-full px-3.5 py-2.5 rounded-xl bg-noir-900 border border-stone-800 text-stone-200 focus:outline-none focus:border-gold-500"
                   >
-                    <option value="Costume Rental Availability">Costume Rental Availability (Sydney)</option>
+                    <option value="Costume rental availability.">Costume rental availability.</option>
                     <option value="Dance School / Troupe Bulk Booking">Dance School / Troupe Bulk Booking</option>
                     <option value="Saree Purchase Enquiry">Saree Purchase Enquiry</option>
                     <option value="Saree Draping & Styling Consultation">Saree Draping & Styling Consultation</option>
@@ -423,6 +423,17 @@
                     class="w-full px-3.5 py-2.5 rounded-xl bg-noir-900 border border-stone-800 text-stone-200 focus:outline-none focus:border-gold-500"
                   />
                 </div>
+              </div>
+
+              <!-- Event/Delivery Location -->
+              <div>
+                <label class="block text-stone-300 font-medium mb-1.5">Event / Delivery Location</label>
+                <input
+                  type="text"
+                  id="eventLocation"
+                  placeholder="e.g. Sydney, Melbourne, Parramatta NSW, or suburb / state"
+                  class="w-full px-3.5 py-2.5 rounded-xl bg-noir-900 border border-stone-800 text-stone-200 placeholder-stone-600 focus:outline-none focus:border-gold-500"
+                />
               </div>
 
               <!-- Message / Requirements -->
@@ -566,8 +577,9 @@
         const business = document.getElementById('businessSelect').value;
         const type = document.getElementById('enquiryType').value;
         const date = document.getElementById('eventDate').value;
+        const location = document.getElementById('eventLocation').value.trim();
         const message = document.getElementById('clientMessage').value.trim();
-        return { name, phone, email, business, type, date, message };
+        return { name, phone, email, business, type, date, location, message };
       }
 
       function submitToWhatsApp() {
@@ -584,6 +596,7 @@
         if (v.email) msg += `• *Email:* ${v.email}\n`;
         msg += `• *Enquiry Type:* ${v.type}\n`;
         if (v.date) msg += `• *Event Date:* ${v.date}\n`;
+        if (v.location) msg += `• *Event/Delivery Location:* ${v.location}\n`;
         if (v.message) msg += `• *Requirements:* ${v.message}\n`;
         msg += `------------------------------\nSent from tashabysujitha.com.au`;
 
@@ -605,6 +618,7 @@
         if (v.email) body += `Email: ${v.email}\n`;
         body += `Enquiry Type: ${v.type}\n`;
         if (v.date) body += `Event Date: ${v.date}\n`;
+        if (v.location) body += `Event/Delivery Location: ${v.location}\n`;
         if (v.message) body += `Message / Requirements: ${v.message}\n\n`;
         body += `Thank you!`;
 
