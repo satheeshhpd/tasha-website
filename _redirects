@@ -1,2 +1,4 @@
-# Cloudflare Pages SPA fallback redirect
-/*    /index.html   200
+# Cloudflare Pages routing
+/inventory/*    /inventory/index.html   200
+/inventory      /inventory/index.html   200
+/*              /index.html             200
