@@ -296,7 +296,15 @@
                 <tbody id="inventoryBody"></tbody>
               </table>
             </div>
-            <p class="text-stone-600 text-[11px] mt-2 text-right">All prices rounded to nearest whole number. Values from Google Sheets SELL tab.</p>
+            <div class="flex flex-wrap items-center justify-between gap-4 mt-4">
+              <p class="text-stone-500 text-xs" id="paginationInfo">Displaying 1–20 of 0 items</p>
+              <div class="flex items-center gap-2">
+                <button onclick="changePage(-1)" id="prevPageBtn" class="btn-ghost px-3 py-1 text-xs" disabled>Previous</button>
+                <div id="pageNumbers" class="flex items-center gap-1"></div>
+                <button onclick="changePage(1)" id="nextPageBtn" class="btn-ghost px-3 py-1 text-xs" disabled>Next</button>
+              </div>
+            </div>
+            <p class="text-stone-600 text-[11px] mt-4 text-right">All prices rounded to nearest whole number. Values from Google Sheets SELL tab.</p>
           </div>
 
           <div id="emptyState" class="hidden flex-col items-center justify-center py-16 gap-3">
@@ -705,7 +713,9 @@
 
     // ─── GLOBAL STATE ──────────────────────────────────────────
     let inventory = [];        // full dataset from sheet
-    let filtered = [];         // current filtered view
+    let filtered  = [];        // current filtered subset
+    let currentPage = 1;
+    const ITEMS_PER_PAGE = 20;
     let editIndex = null;      // row index being edited (null = add new)
     let deleteTarget = null;   // { index, rowNum }
 
@@ -882,6 +892,7 @@
         return matchQ && matchCat && matchStat;
       });
 
+      currentPage = 1;
       renderTable();
       document.getElementById('filteredCount').textContent = filtered.length;
       document.getElementById('totalCount').textContent    = inventory.length;
@@ -911,15 +922,21 @@
       if (!tbody) return;
       tbody.innerHTML = '';
 
-      filtered.forEach((item, i) => {
+      const totalItems = filtered.length;
+      const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE) || 1;
+      
+      if (currentPage > totalPages) currentPage = totalPages;
+      if (currentPage < 1) currentPage = 1;
+
+      const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
+      const endIdx = startIdx + ITEMS_PER_PAGE;
+      const pageItems = filtered.slice(startIdx, endIdx);
+
+      pageItems.forEach((item) => {
         const isSold = !!(item.soldPrize || item.paid || item.customer);
         const statusBadge = isSold
           ? '<span class="status-badge badge-sold">Sold</span>'
           : '<span class="status-badge badge-stock">In Stock</span>';
-
-        const fmtINR = n => n ? '₹' + Number(n).toLocaleString('en-IN') : '—';
-        const fmtAUD = n => n ? 'A$' + Number(n).toFixed(2) : '—';
-        const fmtAUD0 = n => n ? 'A$' + Math.round(n) : '—';
 
         const tr = document.createElement('tr');
         if (isSold) tr.classList.add('sold-row');
@@ -948,6 +965,53 @@
         `;
         tbody.appendChild(tr);
       });
+
+      updatePaginationUI(totalItems, totalPages, startIdx, Math.min(endIdx, totalItems));
+    }
+
+    function updatePaginationUI(totalItems, totalPages, startIdx, endIdxDisplay) {
+      const info = document.getElementById('paginationInfo');
+      const prevBtn = document.getElementById('prevPageBtn');
+      const nextBtn = document.getElementById('nextPageBtn');
+      const pageNumbers = document.getElementById('pageNumbers');
+      
+      if (totalItems === 0) {
+        info.textContent = `Displaying 0 items`;
+        prevBtn.disabled = true;
+        nextBtn.disabled = true;
+        pageNumbers.innerHTML = '';
+        return;
+      }
+      
+      info.textContent = `Displaying ${startIdx + 1}–${endIdxDisplay} of ${totalItems} items`;
+      
+      prevBtn.disabled = currentPage === 1;
+      nextBtn.disabled = currentPage === totalPages;
+      
+      let html = '';
+      for (let i = 1; i <= totalPages; i++) {
+        // Only show a few pages around current to avoid overflow on massive lists
+        if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
+          if (i === currentPage) {
+            html += `<span class="px-2.5 py-1 text-xs font-semibold bg-gold-500/20 text-gold-400 rounded">${i}</span>`;
+          } else {
+            html += `<button onclick="goToPage(${i})" class="px-2.5 py-1 text-xs text-stone-400 hover:text-white hover:bg-white/5 rounded transition-colors">${i}</button>`;
+          }
+        } else if (i === currentPage - 2 || i === currentPage + 2) {
+          html += `<span class="px-1 text-xs text-stone-600">...</span>`;
+        }
+      }
+      pageNumbers.innerHTML = html;
+    }
+
+    function changePage(delta) {
+      currentPage += delta;
+      renderTable();
+    }
+    
+    function goToPage(page) {
+      currentPage = page;
+      renderTable();
     }
 
     function updateKPIs() {
