@@ -894,6 +894,7 @@
 
       currentPage = 1;
       renderTable();
+      updateKPIs();
       document.getElementById('filteredCount').textContent = filtered.length;
       document.getElementById('totalCount').textContent    = inventory.length;
 
@@ -1016,11 +1017,11 @@
 
     function updateKPIs() {
       // Total Items = only rows that have both Name and SKU
-      const items  = inventory.filter(r => r.name && r.sku).length;
-      const qty    = inventory.reduce((s, r) => s + (r.qty || 0), 0);
-      const qtyVal = inventory.reduce((s, r) => s + (r.qtyXVal || 0), 0);
-      const suta   = inventory.reduce((s, r) => s + (r.sutaAUD || 0), 0);
-      const sales  = inventory.reduce((s, r) => s + (r.salesPrice || 0), 0);
+      const items  = filtered.filter(r => r.name && r.sku).length;
+      const qty    = filtered.reduce((s, r) => s + (r.qty || 0), 0);
+      const qtyVal = filtered.reduce((s, r) => s + (r.qtyXVal || 0), 0);
+      const suta   = filtered.reduce((s, r) => s + (r.sutaAUD || 0), 0);
+      const sales  = filtered.reduce((s, r) => s + (r.salesPrice || 0), 0);
 
       document.getElementById('kpiItems').textContent  = items.toLocaleString();
       document.getElementById('kpiQty').textContent    = qty.toLocaleString();
