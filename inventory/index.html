@@ -1204,7 +1204,7 @@
             payload.imageAction = 'upload';
             payload.imageBase64 = base64Data;
             payload.imageMime = mimeType;
-            payload.imageName = (row['Product Code'] || 'image') + '-' + Date.now();
+            payload.imageName = (row['Product Code'] || 'image').trim();
             // Let the user know it might take a second longer
             document.getElementById('saveBtnText').textContent = 'Uploading to Drive...';
           }
