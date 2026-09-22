@@ -103,18 +103,32 @@
       const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzQE_8TcRKhHQDwf33temxfbqJF5YArRM2ZE-0vresjYis9BBQQ7tTOi6AE6oC9HLWA/exec';
       
       async function loadCatalogue() {
+        // 1. Instantly load from cache if available
+        const cached = localStorage.getItem('tasha_catalogue_cache');
+        if (cached) {
+          try {
+            renderGallery(JSON.parse(cached));
+          } catch(e) {} // ignore cache parse errors
+        }
+
+        // 2. Fetch fresh data in the background
         try {
           const res = await fetch(`${APPS_SCRIPT_URL}?action=getAll`);
           if (!res.ok) throw new Error('Network response was not ok');
           const data = await res.json();
           if (data.status === 'ok') {
+            // Update cache and re-render with fresh data
+            localStorage.setItem('tasha_catalogue_cache', JSON.stringify(data.rows));
             renderGallery(data.rows);
           } else {
             throw new Error(data.message || 'Unknown error');
           }
         } catch(err) {
           console.error(err);
-          document.getElementById('loadingState').innerHTML = `<p class="text-red-400">Failed to load collection. Please try again later.</p>`;
+          // Only show error if we have no cached data at all
+          if (!cached) {
+            document.getElementById('loadingState').innerHTML = `<p class="text-red-400">Failed to load collection. Please try again later.</p>`;
+          }
         }
       }
 
