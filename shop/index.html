@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tasha Drapes Catalogue | Tasha by Sujitha</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              gold: { 50:'#FDFBF7',100:'#FBF3D5',200:'#F5E6AC',300:'#EED37B',400:'#E5BF46',500:'#D4AF37',600:'#B89324',700:'#917118',800:'#6E5414',900:'#4D3A11',DEFAULT:'#D4AF37' },
+              noir: { 950:'#070709',900:'#0B0B0E',850:'#111016',800:'#16151E',700:'#22202C' }
+            },
+            fontFamily: {
+              serif: ['Cinzel', 'Georgia', 'serif'],
+              sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        background-color: #070709;
+        background-image: radial-gradient(at 0% 0%, rgba(212, 175, 55, 0.05) 0px, transparent 50%);
+      }
+      .loader {
+        border: 3px solid rgba(212, 175, 55, 0.2);
+        border-top-color: #D4AF37;
+        border-radius: 50%;
+        width: 3rem;
+        height: 3rem;
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin { 100% { transform: rotate(360deg); } }
+      
+      .btn-gold {
+        background: linear-gradient(135deg, #E5BF46 0%, #B89324 100%);
+        color: #000;
+        font-weight: 600;
+        box-shadow: 0 4px 15px -3px rgba(212,175,55,0.4);
+        transition: all 0.3s ease;
+      }
+      .btn-gold:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 20px -3px rgba(212,175,55,0.6);
+      }
+    </style>
+  </head>
+  <body class="bg-noir-950 text-stone-200 min-h-screen flex flex-col">
+    <!-- HEADER -->
+    <header class="sticky top-0 z-50 bg-noir-950/90 backdrop-blur-md border-b border-gold-500/20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
+        <a href="../" class="group flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full border border-gold-500/40 p-0.5 bg-noir-850 flex items-center justify-center overflow-hidden">
+            <img src="../logos/thumb_tashadrapes.png?v=1.1" alt="Tasha by Sujitha" class="w-full h-full object-cover rounded-full" />
+          </div>
+          <div>
+            <span class="font-serif text-lg sm:text-xl font-bold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-gold-200 via-gold-400 to-gold-600 block leading-tight">TASHA</span>
+            <span class="text-[10px] tracking-[0.25em] uppercase text-stone-400 font-light block">by Sujitha</span>
+          </div>
+        </a>
+        <a href="../#enquiry-section" class="btn-gold px-5 py-2 rounded-full text-sm">
+          Contact Us
+        </a>
+      </div>
+    </header>
+
+    <main class="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-8 py-10 sm:py-16">
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <h1 class="font-serif text-3xl sm:text-4xl text-white mb-4">Product Catalogue</h1>
+        <p class="text-stone-400">Browse our latest collection of carefully curated sarees and blouses.</p>
+      </div>
+
+      <!-- Loading State -->
+      <div id="loadingState" class="flex flex-col items-center justify-center py-20 gap-4">
+        <div class="loader"></div>
+        <p class="text-stone-400">Loading collection...</p>
+      </div>
+
+      <!-- Gallery Grid -->
+      <div id="galleryGrid" class="hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8">
+        <!-- Cards injected via JS -->
+      </div>
+    </main>
+
+    <footer class="border-t border-gold-500/10 bg-noir-900 py-8 px-4 text-center mt-auto">
+      <p class="text-stone-500 text-sm">&copy; 2026 Tasha by Sujitha. All rights reserved.</p>
+    </footer>
+
+    <script>
+      const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzQE_8TcRKhHQDwf33temxfbqJF5YArRM2ZE-0vresjYis9BBQQ7tTOi6AE6oC9HLWA/exec';
+      
+      async function loadCatalogue() {
+        try {
+          const res = await fetch(`${APPS_SCRIPT_URL}?action=getAll`);
+          if (!res.ok) throw new Error('Network response was not ok');
+          const data = await res.json();
+          if (data.status === 'ok') {
+            renderGallery(data.rows);
+          } else {
+            throw new Error(data.message || 'Unknown error');
+          }
+        } catch(err) {
+          console.error(err);
+          document.getElementById('loadingState').innerHTML = `<p class="text-red-400">Failed to load collection. Please try again later.</p>`;
+        }
+      }
+
+      function renderGallery(rows) {
+        document.getElementById('loadingState').classList.add('hidden');
+        const grid = document.getElementById('galleryGrid');
+        grid.classList.remove('hidden');
+
+        // Filter: Must have an Image URL
+        const items = rows.filter(r => r['Image URL'] && r['Image URL'].trim() !== '');
+
+        if (items.length === 0) {
+          grid.classList.remove('grid');
+          grid.innerHTML = `<div class="text-center text-stone-500 py-10">No items available currently.</div>`;
+          return;
+        }
+
+        let html = '';
+        items.forEach(item => {
+          const isSold = !!(item['Sold Prize'] || item['Paid'] || item['Customer']);
+          
+          let imgUrl = item['Image URL'];
+          // Convert Google Drive view links to direct image links
+          if (imgUrl.includes('drive.google.com/file/d/')) {
+            const match = imgUrl.match(/\\/d\\/([a-zA-Z0-9_-]+)/);
+            if (match) imgUrl = `https://lh3.googleusercontent.com/d/${match[1]}`;
+          }
+
+          const name = item['Name'] || 'Unnamed Item';
+          const size = item['Size'] ? `Size: ${item['Size']}` : '';
+          const productCode = item['Product Code'] || '';
+
+          // URL to prefill enquiry form on main site
+          const enquiryUrl = `../index.html?business=drapes&type=saree&product=${encodeURIComponent(productCode)}&name=${encodeURIComponent(name)}&size=${encodeURIComponent(item['Size'] || '')}#enquiry-section`;
+
+          html += `
+            <div class="group bg-noir-900 border border-gold-500/10 rounded-2xl overflow-hidden hover:border-gold-500/30 transition-all shadow-lg flex flex-col h-full relative">
+              
+              <!-- Image Container -->
+              <div class="aspect-[4/5] bg-noir-800 relative overflow-hidden">
+                <img src="${imgUrl}" alt="${name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" />
+                ${isSold ? `<div class="absolute inset-0 bg-black/60 flex items-center justify-center backdrop-blur-[2px]">
+                              <span class="border-2 border-red-500 text-red-500 font-serif font-bold text-lg px-6 py-2 uppercase tracking-widest rotate-[-12deg]">Sold Out</span>
+                            </div>` : ''}
+              </div>
+
+              <!-- Content -->
+              <div class="p-5 flex flex-col flex-1">
+                <h3 class="text-lg font-medium text-white leading-tight mb-1">${name}</h3>
+                <p class="text-stone-400 text-sm mb-4">${size}</p>
+                
+                <div class="mt-auto">
+                  <a href="${enquiryUrl}" class="block w-full text-center ${isSold ? 'bg-stone-800 text-stone-400' : 'btn-gold'} py-2.5 rounded-xl text-sm transition-all">
+                    ${isSold ? 'Join Waitlist' : 'Check Price & Availability'}
+                  </a>
+                </div>
+              </div>
+            </div>
+          `;
+        });
+
+        grid.innerHTML = html;
+      }
+
+      window.addEventListener('DOMContentLoaded', loadCatalogue);
+    </script>
+  </body>
+</html>

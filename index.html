@@ -1298,14 +1298,40 @@
         }
       }
 
+      function prefillEnquiryForm() {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('business') || urlParams.has('product')) {
+          if (urlParams.get('business') === 'drapes') {
+            const select = document.getElementById('businessSelect');
+            if (select) select.value = 'Tasha Drapes (Sarees for Sale)';
+          }
+          if (urlParams.get('type') === 'saree') {
+            const type = document.getElementById('enquiryType');
+            if (type) type.value = 'Saree Purchase Enquiry';
+          }
+          const product = urlParams.get('product');
+          if (product) {
+            const name = urlParams.get('name') || '';
+            const size = urlParams.get('size') || '';
+            let msg = `Enquiring about ${product}`;
+            if (name) msg += ` - ${name}`;
+            if (size) msg += ` (Size: ${size})`;
+            const textArea = document.getElementById('clientMessage');
+            if (textArea) textArea.value = msg;
+          }
+        }
+      }
+
       if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', () => {
           initReviews();
           setupReviewEventListeners();
+          prefillEnquiryForm();
         });
       } else {
         initReviews();
         setupReviewEventListeners();
+        prefillEnquiryForm();
       }
     </script>
   </body>
