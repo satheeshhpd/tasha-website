@@ -1,66 +1,72 @@
-# Tasha by Sujitha — Official Landing Page (`tashabysujitha.com.au`)
+# Tasha by Sujitha — Official Website (`tashabysujitha.com.au`)
 
-A simple, standalone landing page for **Tasha by Sujitha**, showcasing its two sister brands:
+A comprehensive website and inventory management system for **Tasha by Sujitha**, showcasing its two sister brands:
 1. **Tasha Costumes**: Dance Costumes & Accessories for Rental • Sydney
 2. **Tasha Drapes**: Curated Sarees & Blouses for Sale • Australia
 
 ---
 
-## 🌟 Features
+## 🌟 Site Architecture & Navigation
 
-- **Centered Dual Logos**: Displays the logos for both Tasha Costumes and Tasha Drapes side-by-side with Instagram profile links under each.
-- **Direct WhatsApp Option**: Instant one-click WhatsApp chat button to Sujitha (`0466 977 408`).
-- **Booking & Purchase Enquiry Form**:
-  - Customer Name, Phone, Email
-  - Select Business (*Tasha Costumes / Tasha Drapes / Both*)
-  - Enquiry Type (*Rental availability, Saree purchase, Styling consultation, Bulk group booking*)
-  - Performance / Event Date picker
-  - Details / Size requirements
-  - Direct submission via WhatsApp or Email (no payment gateway needed)
-- **Header & Footer**: Consistent luxury gold and obsidian dark theme with contact information.
+The project is split into three main areas:
+
+### 1. Main Landing Page (`/`)
+- **Centered Dual Logos**: Links to Instagram profiles for both brands.
+- **Booking & Enquiry Form**: Customers can submit enquiries for rentals, saree purchases, or styling consultations. Submissions are formatted and sent directly via WhatsApp or Email.
+- **Dynamic Pre-filling**: Forms automatically select the correct business and pre-fill details when navigated from the Shop catalogue.
+
+### 2. Public Shop Catalogue (`/shop`)
+- **Live Inventory**: Displays the latest sarees and blouses fetched directly from Google Sheets via Apps Script.
+- **Optimized Performance**: Uses `localStorage` SWR (Stale-While-Revalidate) caching to instantly render the page while quietly fetching fresh data in the background.
+- **Smart Filtering & Pagination**: Search by name/code, filter by category (Sarees/Blouses), and browse 20 items per page with smooth auto-scrolling.
+- **Sold Out Logic**: Items marked as paid or sold automatically display a "Sold Out" badge and change their action button to "Join Waitlist".
+- **Enquiry Link**: "Check Price & Availability" buttons link back to the Main Landing Page form, dynamically pre-filling the exact product ID, name, and size.
+
+### 3. Staff Inventory Dashboard (`/inventory`)
+- **Protected Access**: Requires a staff password to log in.
+- **Bi-Directional Sync**: Connects directly to the `SELL` tab of the Google Sheet. Adding, editing, or deleting items on the dashboard immediately updates the Google Sheet, and vice-versa.
+- **Image Uploads**: Uploads compressed, web-optimized product photos directly to a public Google Drive folder, naming them exactly by `Product Code`. Overwrites old photos automatically to save Drive space.
+- **KPI Metrics**: Displays total items, total units, and total retail value dynamically based on search filters and categories.
+- **Data Export**: Staff can export the filtered inventory list to a CSV file in one click.
 
 ---
 
-## 📁 Files Included
+## 📁 Project Structure
 
 ```
 ecommerce/
-├── index.html        # Main standalone landing page (zero build step needed)
-├── favicon.svg       # Brand monogram favicon
-├── logos/            # Web-optimized logos and thumbnails for both brands
-│   ├── tashacostumes.png
-│   ├── tashadrapes.png
-│   ├── thumb_tashacostumes.png
-│   └── thumb_tashadrapes.png
-├── _redirects        # Cloudflare Pages SPA fallback rule
-├── _headers          # Cloudflare Pages caching and security headers
-├── wrangler.toml     # Cloudflare Pages deployment configuration
-└── README.md
+├── index.html                     # Main standalone landing page
+├── shop/
+│   └── index.html                 # Public Product Catalogue (Tasha Drapes)
+├── inventory/
+│   └── index.html                 # Staff Inventory Dashboard (Password Protected)
+├── appscript_integration_guide-*.md # Guide and source code for the Google Apps Script API
+├── favicon.svg                    # Brand monogram favicon
+├── logos/                         # Web-optimized logos and thumbnails
+├── _redirects                     # Cloudflare Pages SPA fallback rule
+├── _headers                       # Cloudflare caching and security headers
+└── README.md                      # This documentation file
 ```
 
 ---
 
-## ☁️ How to Deploy to Cloudflare Pages
+## 🔗 Technical Integrations
 
-### Option 1: Direct Upload (Drag & Drop)
-1. Go to the [Cloudflare Dashboard](https://dash.cloudflare.com/).
-2. Navigate to **Workers & Pages** -> **Create application** -> **Pages** -> **Upload assets**.
-3. Upload this folder.
-4. Add your custom domain `tashabysujitha.com.au` under Custom Domains.
+### Google Apps Script (Backend API)
+Because this site is statically hosted on Cloudflare Pages, a **Google Apps Script** acts as the backend API to interface with Google Sheets and Google Drive.
+- The hardcoded Web App URL connects the frontend (`/shop` and `/inventory`) to the backend.
+- **Google Sheets**: Serves as the database.
+- **Google Drive**: Serves as the CDN for product images. When a new image is uploaded via the inventory dashboard, the Apps Script names it using the `Product Code`, trashes any existing image with the same name, and returns a direct `lh3.googleusercontent.com` CDN link for fast loading.
 
-### Option 2: Git Repository (GitHub / GitLab)
-1. Push this folder to a Git repository.
-2. In Cloudflare Pages, connect to your repository.
-3. Set:
-   - **Framework preset**: `None`
-   - **Build command**: *(leave blank)*
-   - **Build output directory**: `.`
-4. Deploy!
+*Note: For setup instructions or to update the Apps Script code, refer to the `appscript_integration_guide-22sep2026.md` file located in the root directory.*
 
-### Option 3: Wrangler CLI
-```bash
-npx wrangler pages deploy . --project-name=tashabysujitha
-```
+---
+
+## ☁️ Deployment (Cloudflare Pages)
+
+This project has zero build steps (no npm, no Webpack) and uses standard HTML, Tailwind CSS (via CDN), and Vanilla JavaScript.
+
+Whenever code is pushed to the `main` branch on GitHub, Cloudflare Pages will automatically deploy the latest changes to `tashabysujitha.com.au` within seconds.
 
 ---
 
