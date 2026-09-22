@@ -109,8 +109,18 @@
       </div>
 
       <!-- Gallery Grid -->
-      <div id="galleryGrid" class="hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8">
+      <div id="galleryGrid" class="hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8 mb-8">
         <!-- Cards injected via JS -->
+      </div>
+
+      <!-- Pagination -->
+      <div id="paginationControls" class="hidden flex flex-col sm:flex-row items-center justify-between gap-4 bg-noir-900 border border-gold-500/10 rounded-2xl p-4">
+        <div id="pageStatus" class="text-stone-400 text-sm"></div>
+        <div class="flex items-center gap-2">
+          <button id="prevPageBtn" onclick="changePage(-1)" class="px-3 py-1.5 rounded-lg text-sm bg-noir-800 text-stone-300 hover:text-white hover:bg-gold-500/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">Previous</button>
+          <div id="pageNumbers" class="flex items-center gap-1"></div>
+          <button id="nextPageBtn" onclick="changePage(1)" class="px-3 py-1.5 rounded-lg text-sm bg-noir-800 text-stone-300 hover:text-white hover:bg-gold-500/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">Next</button>
+        </div>
       </div>
     </main>
 
@@ -121,23 +131,21 @@
     <script>
       const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzQE_8TcRKhHQDwf33temxfbqJF5YArRM2ZE-0vresjYis9BBQQ7tTOi6AE6oC9HLWA/exec';
       let allItems = [];
+      let filteredItems = [];
+      let currentShopPage = 1;
+      const ITEMS_PER_PAGE = 20;
 
       async function loadCatalogue() {
-        // 1. Instantly load from cache if available
         const cached = localStorage.getItem('tasha_catalogue_cache');
         if (cached) {
-          try {
-            initCatalogue(JSON.parse(cached));
-          } catch(e) {} // ignore cache parse errors
+          try { initCatalogue(JSON.parse(cached)); } catch(e) {}
         }
 
-        // 2. Fetch fresh data in the background
         try {
           const res = await fetch(`${APPS_SCRIPT_URL}?action=getAll`);
           if (!res.ok) throw new Error('Network response was not ok');
           const data = await res.json();
           if (data.status === 'ok') {
-            // Update cache and re-render with fresh data
             localStorage.setItem('tasha_catalogue_cache', JSON.stringify(data.rows));
             initCatalogue(data.rows);
           } else {
@@ -145,7 +153,6 @@
           }
         } catch(err) {
           console.error(err);
-          // Only show error if we have no cached data at all
           if (allItems.length === 0) {
             document.getElementById('loadingState').innerHTML = `<p class="text-red-400">Failed to load collection. Please try again later.</p>`;
           }
@@ -157,7 +164,6 @@
         document.getElementById('filterBar').classList.remove('hidden');
         document.getElementById('galleryGrid').classList.remove('hidden');
 
-        // Filter: Must have an Image URL
         allItems = rows.filter(r => r['Image URL'] && r['Image URL'].trim() !== '');
         applyFilters();
       }
@@ -172,7 +178,7 @@
         const query = document.getElementById('searchInput').value.trim().toLowerCase();
         const category = document.getElementById('categoryFilter').value.toLowerCase();
         
-        const filtered = allItems.filter(item => {
+        filteredItems = allItems.filter(item => {
           const matchQ = !query || 
             (item.Name && item.Name.toLowerCase().includes(query)) || 
             (item['Product Code'] && item['Product Code'].toLowerCase().includes(query));
@@ -183,22 +189,46 @@
           return matchQ && matchCat;
         });
 
-        renderGallery(filtered);
+        currentShopPage = 1;
+        renderGallery();
       }
 
-      function renderGallery(items) {
+      function changePage(delta) {
+        currentShopPage += delta;
+        renderGallery();
+        window.scrollTo({ top: document.getElementById('galleryGrid').offsetTop - 100, behavior: 'smooth' });
+      }
+
+      function goToPage(page) {
+        currentShopPage = page;
+        renderGallery();
+        window.scrollTo({ top: document.getElementById('galleryGrid').offsetTop - 100, behavior: 'smooth' });
+      }
+
+      function renderGallery() {
         const grid = document.getElementById('galleryGrid');
+        const pagination = document.getElementById('paginationControls');
         
-        if (items.length === 0) {
+        if (filteredItems.length === 0) {
           grid.classList.remove('grid');
           grid.innerHTML = `<div class="text-center text-stone-500 py-10">No items match your filters.</div>`;
+          pagination.classList.add('hidden');
           return;
         }
+
+        const totalItems = filteredItems.length;
+        const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
+        if (currentShopPage > totalPages) currentShopPage = totalPages;
+        if (currentShopPage < 1) currentShopPage = 1;
+
+        const startIndex = (currentShopPage - 1) * ITEMS_PER_PAGE;
+        const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, totalItems);
+        const pageItems = filteredItems.slice(startIndex, endIndex);
 
         grid.classList.add('grid');
         let html = '';
         
-        items.forEach(item => {
+        pageItems.forEach(item => {
           const isSold = !!(item['Sold Prize'] || item['Paid'] || item['Customer']);
           
           let imgUrl = item['Image URL'];
@@ -211,7 +241,6 @@
           const size = item['Size'] ? `Size: ${item['Size']}` : '';
           const productCode = item['Product Code'] || '';
 
-          // URL to prefill enquiry form on main site
           const enquiryUrl = `../index.html?business=drapes&type=saree&product=${encodeURIComponent(productCode)}&name=${encodeURIComponent(name)}&size=${encodeURIComponent(item['Size'] || '')}#enquiry-section`;
 
           html += `
@@ -236,9 +265,36 @@
         });
 
         grid.innerHTML = html;
+
+        // Render Pagination UI
+        if (totalItems > ITEMS_PER_PAGE) {
+          pagination.classList.remove('hidden');
+          pagination.classList.add('flex');
+          
+          document.getElementById('pageStatus').textContent = `Displaying ${startIndex + 1}–${endIndex} of ${totalItems} items`;
+          
+          document.getElementById('prevPageBtn').disabled = currentShopPage === 1;
+          document.getElementById('nextPageBtn').disabled = currentShopPage === totalPages;
+
+          let pageHtml = '';
+          for (let i = 1; i <= totalPages; i++) {
+            if (i === 1 || i === totalPages || (i >= currentShopPage - 1 && i <= currentShopPage + 1)) {
+              if (i === currentShopPage) {
+                pageHtml += `<span class="px-2.5 py-1 text-xs font-semibold bg-gold-500/20 text-gold-400 rounded">${i}</span>`;
+              } else {
+                pageHtml += `<button onclick="goToPage(${i})" class="px-2.5 py-1 text-xs text-stone-400 hover:text-white hover:bg-white/5 rounded transition-colors">${i}</button>`;
+              }
+            } else if (i === currentShopPage - 2 || i === currentShopPage + 2) {
+              pageHtml += `<span class="px-1 text-xs text-stone-600">...</span>`;
+            }
+          }
+          document.getElementById('pageNumbers').innerHTML = pageHtml;
+        } else {
+          pagination.classList.add('hidden');
+          pagination.classList.remove('flex');
+        }
       }
 
-      // Run immediately since script is at the bottom of the body
       loadCatalogue();
     </script>
   </body>
