@@ -193,7 +193,8 @@
         grid.innerHTML = html;
       }
 
-      window.addEventListener('DOMContentLoaded', loadCatalogue);
+      // Run immediately since script is at the bottom of the body
+      loadCatalogue();
     </script>
   </body>
 </html>
