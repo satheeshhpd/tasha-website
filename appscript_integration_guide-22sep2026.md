@@ -101,12 +101,11 @@ function doPost(e) {
     if (payload.imageAction === 'upload' && payload.imageBase64) {
       const folder = DriveApp.getFolderById(IMAGE_FOLDER_ID);
       
-      // Filename logic: use Product Code, add -a, -b, -c if it already exists
-      let finalName = payload.imageName;
-      let suffixCode = 97; // char code for 'a'
-      while (folder.getFilesByName(finalName).hasNext()) {
-        finalName = payload.imageName + '-' + String.fromCharCode(suffixCode);
-        suffixCode++;
+      // Filename logic: use Product Code. If an image with this name already exists, delete it so it is replaced.
+      const finalName = payload.imageName;
+      const existingFiles = folder.getFilesByName(finalName);
+      while (existingFiles.hasNext()) {
+        existingFiles.next().setTrashed(true);
       }
 
       const blob = Utilities.newBlob(Utilities.base64Decode(payload.imageBase64), payload.imageMime, finalName);
