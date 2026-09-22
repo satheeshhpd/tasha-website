@@ -89,6 +89,25 @@
         <p class="text-stone-400">Loading collection...</p>
       </div>
 
+      <!-- Filters -->
+      <div id="filterBar" class="hidden mb-8 bg-noir-900 border border-gold-500/10 rounded-2xl p-4 flex flex-wrap items-end gap-4 shadow-lg">
+        <div class="flex-1 min-w-[200px]">
+          <label class="block text-stone-400 text-xs font-medium mb-1.5">Search</label>
+          <input id="searchInput" type="text" placeholder="Search by name or code..." class="w-full bg-noir-800 border border-stone-800 text-stone-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-gold-500 transition-colors" oninput="applyFilters()">
+        </div>
+        <div class="min-w-[150px]">
+          <label class="block text-stone-400 text-xs font-medium mb-1.5">Category</label>
+          <select id="categoryFilter" class="w-full bg-noir-800 border border-stone-800 text-stone-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-gold-500 transition-colors" onchange="applyFilters()">
+            <option value="">All Items</option>
+            <option value="saree">Sarees</option>
+            <option value="blouse">Blouses</option>
+          </select>
+        </div>
+        <button onclick="clearFilters()" class="px-5 py-2.5 rounded-xl text-sm text-stone-400 hover:text-white hover:bg-noir-800 transition-colors border border-transparent hover:border-stone-800 h-[42px]">
+          Clear Filter
+        </button>
+      </div>
+
       <!-- Gallery Grid -->
       <div id="galleryGrid" class="hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8">
         <!-- Cards injected via JS -->
@@ -101,13 +120,14 @@
 
     <script>
       const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzQE_8TcRKhHQDwf33temxfbqJF5YArRM2ZE-0vresjYis9BBQQ7tTOi6AE6oC9HLWA/exec';
-      
+      let allItems = [];
+
       async function loadCatalogue() {
         // 1. Instantly load from cache if available
         const cached = localStorage.getItem('tasha_catalogue_cache');
         if (cached) {
           try {
-            renderGallery(JSON.parse(cached));
+            initCatalogue(JSON.parse(cached));
           } catch(e) {} // ignore cache parse errors
         }
 
@@ -119,39 +139,69 @@
           if (data.status === 'ok') {
             // Update cache and re-render with fresh data
             localStorage.setItem('tasha_catalogue_cache', JSON.stringify(data.rows));
-            renderGallery(data.rows);
+            initCatalogue(data.rows);
           } else {
             throw new Error(data.message || 'Unknown error');
           }
         } catch(err) {
           console.error(err);
           // Only show error if we have no cached data at all
-          if (!cached) {
+          if (allItems.length === 0) {
             document.getElementById('loadingState').innerHTML = `<p class="text-red-400">Failed to load collection. Please try again later.</p>`;
           }
         }
       }
 
-      function renderGallery(rows) {
+      function initCatalogue(rows) {
         document.getElementById('loadingState').classList.add('hidden');
-        const grid = document.getElementById('galleryGrid');
-        grid.classList.remove('hidden');
+        document.getElementById('filterBar').classList.remove('hidden');
+        document.getElementById('galleryGrid').classList.remove('hidden');
 
         // Filter: Must have an Image URL
-        const items = rows.filter(r => r['Image URL'] && r['Image URL'].trim() !== '');
+        allItems = rows.filter(r => r['Image URL'] && r['Image URL'].trim() !== '');
+        applyFilters();
+      }
 
+      function clearFilters() {
+        document.getElementById('searchInput').value = '';
+        document.getElementById('categoryFilter').value = '';
+        applyFilters();
+      }
+
+      function applyFilters() {
+        const query = document.getElementById('searchInput').value.trim().toLowerCase();
+        const category = document.getElementById('categoryFilter').value.toLowerCase();
+        
+        const filtered = allItems.filter(item => {
+          const matchQ = !query || 
+            (item.Name && item.Name.toLowerCase().includes(query)) || 
+            (item['Product Code'] && item['Product Code'].toLowerCase().includes(query));
+            
+          const itemCat = (item.Category || '').toLowerCase();
+          const matchCat = !category || itemCat.includes(category);
+          
+          return matchQ && matchCat;
+        });
+
+        renderGallery(filtered);
+      }
+
+      function renderGallery(items) {
+        const grid = document.getElementById('galleryGrid');
+        
         if (items.length === 0) {
           grid.classList.remove('grid');
-          grid.innerHTML = `<div class="text-center text-stone-500 py-10">No items available currently.</div>`;
+          grid.innerHTML = `<div class="text-center text-stone-500 py-10">No items match your filters.</div>`;
           return;
         }
 
+        grid.classList.add('grid');
         let html = '';
+        
         items.forEach(item => {
           const isSold = !!(item['Sold Prize'] || item['Paid'] || item['Customer']);
           
           let imgUrl = item['Image URL'];
-          // Convert Google Drive view links to direct image links
           if (imgUrl.includes('drive.google.com/file/d/')) {
             const match = imgUrl.match(new RegExp('/d/([a-zA-Z0-9_-]+)'));
             if (match) imgUrl = `https://lh3.googleusercontent.com/d/${match[1]}`;
@@ -166,20 +216,15 @@
 
           html += `
             <div class="group bg-noir-900 border border-gold-500/10 rounded-2xl overflow-hidden hover:border-gold-500/30 transition-all shadow-lg flex flex-col h-full relative">
-              
-              <!-- Image Container -->
               <div class="aspect-[4/5] bg-noir-800 relative overflow-hidden">
                 <img src="${imgUrl}" alt="${name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" />
                 ${isSold ? `<div class="absolute inset-0 bg-black/60 flex items-center justify-center backdrop-blur-[2px]">
                               <span class="border-2 border-red-500 text-red-500 font-serif font-bold text-lg px-6 py-2 uppercase tracking-widest rotate-[-12deg]">Sold Out</span>
                             </div>` : ''}
               </div>
-
-              <!-- Content -->
               <div class="p-5 flex flex-col flex-1">
                 <h3 class="text-lg font-medium text-white leading-tight mb-1">${name}</h3>
                 <p class="text-stone-400 text-sm mb-4">${size}</p>
-                
                 <div class="mt-auto">
                   <a href="${enquiryUrl}" class="block w-full text-center ${isSold ? 'bg-stone-800 text-stone-400' : 'btn-gold'} py-2.5 rounded-xl text-sm transition-all">
                     ${isSold ? 'Join Waitlist' : 'Check Price & Availability'}
