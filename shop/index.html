@@ -139,13 +139,21 @@
     </footer>
 
     <script>
-      const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwTjNzKzcH07CUjKSYRWJDf4xjEy7DIbQw3Ll2lZeoPdtWH6zIirII5reNJpdRWG-EA/exec';
+      let APPS_SCRIPT_URL = '';
       let allItems = [];
       let filteredItems = [];
       let currentShopPage = 1;
       const ITEMS_PER_PAGE = 20;
 
       async function loadCatalogue() {
+        try {
+          const cfgRes = await fetch('../config.json');
+          if (cfgRes.ok) {
+            const cfg = await cfgRes.json();
+            if (cfg.APPS_SCRIPT_URL) APPS_SCRIPT_URL = cfg.APPS_SCRIPT_URL;
+          }
+        } catch(e) { console.warn('Could not load config.json'); }
+
         const cached = localStorage.getItem('tasha_catalogue_cache');
         if (cached) {
           try { initCatalogue(JSON.parse(cached)); } catch(e) {}

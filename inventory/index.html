@@ -709,7 +709,7 @@
 
     // ★ REPLACE with your deployed Apps Script Web App URL
     // Instructions: see AppScript integration guide below
-    let APPS_SCRIPT_URL = localStorage.getItem('tasha_script_url') || 'https://script.google.com/macros/s/AKfycbwTjNzKzcH07CUjKSYRWJDf4xjEy7DIbQw3Ll2lZeoPdtWH6zIirII5reNJpdRWG-EA/exec';
+    let APPS_SCRIPT_URL = localStorage.getItem('tasha_script_url') || '';
 
     // ─── GLOBAL STATE ──────────────────────────────────────────
     let inventory = [];        // full dataset from sheet
@@ -761,7 +761,21 @@
     });
 
     // ─── INIT ──────────────────────────────────────────────────
-    function initApp() {
+    async function initApp() {
+      // Attempt to load from config.json first
+      try {
+        const cfgRes = await fetch('../config.json');
+        if (cfgRes.ok) {
+          const cfg = await cfgRes.json();
+          if (cfg.APPS_SCRIPT_URL) {
+            APPS_SCRIPT_URL = cfg.APPS_SCRIPT_URL;
+            localStorage.setItem('tasha_script_url', APPS_SCRIPT_URL);
+          }
+        }
+      } catch (e) {
+        console.warn('config.json not found or invalid, falling back to localStorage.');
+      }
+
       if (APPS_SCRIPT_URL) {
         fetchFromSheet();
       } else {
