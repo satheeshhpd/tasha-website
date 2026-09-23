@@ -15,7 +15,7 @@ The project is split into three main areas:
 - **Booking & Enquiry Form**: Customers can submit enquiries for rentals, saree purchases, or styling consultations. Submissions are formatted and sent directly via WhatsApp or Email.
 - **Dynamic Pre-filling**: Forms automatically select the correct business and pre-fill details when navigated from the Shop catalogue.
 
-### 2. Public Shop Catalogue (`/shop`)
+### 2. Public Shop Catalogue (`/shopdrapes`)
 - **Live Inventory**: Displays the latest sarees and blouses fetched directly from Google Sheets via Apps Script.
 - **Optimized Performance**: Uses `localStorage` SWR (Stale-While-Revalidate) caching to instantly render the page while quietly fetching fresh data in the background.
 - **Smart Filtering & Pagination**: Search by name/code, filter by category (Sarees/Blouses), and browse 20 items per page with smooth auto-scrolling.
@@ -36,7 +36,7 @@ The project is split into three main areas:
 ```
 ecommerce/
 ├── index.html                     # Main standalone landing page
-├── shop/
+├── shopdrapes/
 │   └── index.html                 # Public Product Catalogue (Tasha Drapes)
 ├── inventory/
 │   └── index.html                 # Staff Inventory Dashboard (Password Protected)
@@ -54,7 +54,7 @@ ecommerce/
 
 ### Google Apps Script (Backend API)
 Because this site is statically hosted on Cloudflare Pages, a **Google Apps Script** acts as the backend API to interface with Google Sheets and Google Drive.
-- The hardcoded Web App URL connects the frontend (`/shop` and `/inventory`) to the backend.
+- The hardcoded Web App URL connects the frontend (`/shopdrapes` and `/inventory`) to the backend.
 - **Google Sheets**: Serves as the database.
 - **Google Drive**: Serves as the CDN for product images. When a new image is uploaded via the inventory dashboard, the Apps Script names it using the `Product Code`, trashes any existing image with the same name, and returns a direct `lh3.googleusercontent.com` CDN link for fast loading.
 
